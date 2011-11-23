@@ -28,11 +28,14 @@ You only need to have Backbone (including underscore.js - a requirement for Back
 ## Setup a model
 
 There are two ways of using this actAs-plugin:
+
 1.	*Globally.* You can simply mix it to Backbone.Model.prototype (like Backbone.Events) and all your models automatically become Mementoable.
 ````
 _.extend( Backbone.Model.prototype, Backbone.actAs.Mementoable );
 ````
+
 2.	*Locally.* See first paragraf, but mix Backbone.actAs.Mementoable to your own model prototype.
+
 3.	*Secret way ^_^.* You can use Backbone.actAs.Memento directly without using Backbone.actAs.Mementoable.
 
 ## Usage
