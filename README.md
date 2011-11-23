@@ -30,9 +30,9 @@ You only need to have Backbone (including underscore.js - a requirement for Back
 There are two ways of using this actAs-plugin:
 
 1.	*Globally.* You can simply mix it to Backbone.Model.prototype (like Backbone.Events) and all your models automatically become Mementoable.
-````
+```javascript
 _.extend( Backbone.Model.prototype, Backbone.actAs.Mementoable );
-````
+```
 
 2.	*Locally.* See first paragraf, but mix Backbone.actAs.Mementoable to your own model prototype.
 
@@ -42,7 +42,7 @@ _.extend( Backbone.Model.prototype, Backbone.actAs.Mementoable );
 
 ### Simple operations
 
-````
+```javascript
 /**
  * Let's create test object
  */
@@ -92,7 +92,7 @@ console.log( TestObject.get('name') ); //'Ooops'
 TestObject.restoreMemento();
 console.log( TestObject.get('name') ); //'Ihha!!1'
 
-````
+```
 Really simple, yeah? :)
 
 ### Using event hooks
@@ -102,7 +102,7 @@ If you have some attributes of an object that you don't want to store/restore
 you don't need to rewrite store/restoreMememnto methods. All you need is to bind
 some callbacks to special events.
 
-````
+```javascript
 _.extend( Backbone.Model.prototype, Backbone.actAs.Mementoable );
 var MyCoolModel = Backbone.Model.extend({
 	defaults:{
@@ -142,7 +142,7 @@ TestObject.bind( 'memento:before-restore', function(memento){
 	});
 }, TestObject );
 
-````
+```
 
 ### Using model hooks
 
@@ -151,7 +151,7 @@ Of course you can bind event hooks inside your initialize() method, but there is
 
 Let's rewrite previous example in a new way.
 
-````
+```javascript
 
 _.extend( Backbone.Model.prototype, Backbone.actAs.Mementoable );
 var MyCoolModel = Backbone.Model.extend({
@@ -185,7 +185,7 @@ var MyCoolModel = Backbone.Model.extend({
 		});
 	}
 });
-````
+```
 As you can see, code is much more neat than before.
 
 # API
