@@ -146,7 +146,7 @@ TestObject.bind( 'memento:before-restore', function(memento){
 
 ### Using model hooks
 
-This use-case is just a syntactic sugar for events hooks. It's useful to keep all your login inside your model.
+This use-case is just a syntactic sugar for events hooks. It's useful to keep all your logic inside your model.
 Of course you can bind event hooks inside your initialize() method, but there is a better way.
 
 Let's rewrite previous example in a new way.
