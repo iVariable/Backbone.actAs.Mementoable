@@ -11,7 +11,7 @@ but i need more flexibility so i've written my own implementation.
 
 ### Differences from Backbone.Memento
 
-1.	I have an independent object (Backbone.actAs.Memento) for storing memento information.
+1.	Independent object (Backbone.actAs.Memento) for storing memento information.
 	Of course this object is a child of Backbone.Model with all bonuses from this fact.
 2.	Backbone.actAs.Memento object are comparable. You can compare two Memento objects by simple call of equal() method.
 3.	There are special methods for retrieving, storing and restoring Memento objects.
@@ -190,4 +190,4 @@ As you can see, code is much more neat than before.
 
 # API
 
-For API - see source in src/ folder in this repository. I want to believe code is self-explanatory. :)
+For API - see source in src/ folder in this repository. I want to believe code it's self-explanatory. :)
