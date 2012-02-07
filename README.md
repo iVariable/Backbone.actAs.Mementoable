@@ -13,7 +13,7 @@ but i need more flexibility so i've written my own implementation.
 
 1.	Independent object (Backbone.actAs.Memento) for storing memento information.
 	Of course this object is a child of Backbone.Model with all bonuses from this fact.
-2.	Backbone.actAs.Memento object are comparable. You can compare two Memento objects by simple call of equal() method.
+2.	Backbone.actAs.Memento object are comparable. You can compare two Memento objects by simple call of equal() method. As a result of comparable you can get difference between two mementos by diff() method.
 3.	There are special methods for retrieving, storing and restoring Memento objects.
 	You can call saveMemento() to get current state of your model in the form of Backbone.actAs.Memento and make some operations over it.
 	Or you can call storeMemento(), to store Memento internally in your object.
@@ -73,6 +73,7 @@ console.log( TestObject.get('name') ); //'Ooops'
 
 if( !Memento0.equal( TestObject.saveMemento() ) ){
 	console.log('Now mementos aren\'t equal');
+	console.dir( Memento0.diff( TestObject.saveMemento() ) ); // Let's see what is different form our saved state
 }
 
 TestObject.restoreMemento( Memento0 ); // Restoring our memento
@@ -190,4 +191,4 @@ As you can see, code is much more neat than before.
 
 # API
 
-For API - see source in src/ folder in this repository. I want to believe code it's self-explanatory. :)
+For API - see source in src/ folder in this repository. I want to believe code is self-explanatory. :)

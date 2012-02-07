@@ -7,15 +7,35 @@ Backbone.actAs.Memento = Backbone.Model.extend({
 	},
 
 	equal: function( memento ){
-		if( !( memento instanceof Backbone.actAs.Memento ) ) return false;
+		if( !( memento instanceof Backbone.actAs.Memento ) ) throw Error('Trying to compare non-Memento object.');
 		return _.isEqual( this.toJSON(), memento.toJSON() );
 	},
 
-	memento: function(){
+	diff: function( memento ){ // No type comparison here!
+		if( !( memento instanceof Backbone.actAs.Memento ) ) throw Error('Trying to compare non-Memento object.');
+		var mem = memento.memento(),
+			_keys = _( this.memento() )
+					.chain()
+					.map(function(value, key){ return _.isEqual( value, this[key] )?'':key; }, memento.memento())
+					.compact(),
+			result = {};
+
+		if( _keys.size().value() > 0 ){
+			_keys.each(function(key){
+				result[key] = this[key];
+
+			}, this.memento());
+		}
+		return result;
+	},
+
+	memento: function(memento){
+		if( typeof memento != 'undefined' ) this.set({memento:_.clone(memento)});
 		return this.get('memento');
 	},
 
-	type: function(){
+	type: function(type){
+		if( typeof type != 'undefined' ) this.set({type:_.clone(type)});
 		return this.get('type');
 	}
 

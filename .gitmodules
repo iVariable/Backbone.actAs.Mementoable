@@ -1,0 +1,6 @@
+[submodule "tests/vendor/qunit"]
+	path = tests/vendor/qunit
+	url = https://github.com/jquery/qunit.git
+[submodule "tests/vendor/backbone"]
+	path = tests/vendor/backbone
+	url = https://github.com/documentcloud/backbone.git
