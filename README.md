@@ -192,3 +192,17 @@ As you can see, code is much more neat than before.
 # API
 
 For API - see source in src/ folder in this repository. I want to believe code is self-explanatory. :)
+
+# ChangeLog
+
+## v0.2
+* diff() method changed. Now it just collaborate the results of diffChanged, diffAdded, diffDeleted methods (issue #1)
+* diffChanged() method added. (issue #1)
+* diffAdded() method added. (issue #1)
+* diffDeleted() method added. (issue #1)
+
+## v0.1.1
+* diff() method added. (issue #1)
+
+## v0.1
+* Initial release

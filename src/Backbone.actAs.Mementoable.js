@@ -1,22 +1,14 @@
 Backbone.actAs = Backbone.actAs || {};
-Backbone.actAs.Memento = Backbone.Model.extend({
+Backbone.actAs.Memento = (function(){
 
-	defaults:{
-		type: 'Memento',
-		memento: ''
-	},
+	var diff = function( originalMemento, comparedMemento, mapFunction ){
+		if( !( originalMemento instanceof Backbone.actAs.Memento ) ) throw Error('Trying to compare non-Memento object.');
+		if( !( comparedMemento instanceof Backbone.actAs.Memento ) ) throw Error('Trying to compare non-Memento object.');
 
-	equal: function( memento ){
-		if( !( memento instanceof Backbone.actAs.Memento ) ) throw Error('Trying to compare non-Memento object.');
-		return _.isEqual( this.toJSON(), memento.toJSON() );
-	},
-
-	diff: function( memento ){ // No type comparison here!
-		if( !( memento instanceof Backbone.actAs.Memento ) ) throw Error('Trying to compare non-Memento object.');
-		var mem = memento.memento(),
-			_keys = _( this.memento() )
+		var mem = comparedMemento.memento(),
+			_keys = _( originalMemento.memento() )
 					.chain()
-					.map(function(value, key){ return _.isEqual( value, this[key] )?'':key; }, memento.memento())
+					.map(mapFunction, comparedMemento.memento())
 					.compact(),
 			result = {};
 
@@ -24,22 +16,61 @@ Backbone.actAs.Memento = Backbone.Model.extend({
 			_keys.each(function(key){
 				result[key] = this[key];
 
-			}, this.memento());
+			}, originalMemento.memento());
 		}
 		return result;
-	},
+	};
 
-	memento: function(memento){
-		if( typeof memento != 'undefined' ) this.set({memento:_.clone(memento)});
-		return this.get('memento');
-	},
+	var diffNonExistMap = function(value, key){ return ( typeof this[key] == 'undefined' )?key:''; },
+		diffChangedMap = function(value, key){ return (_.isEqual( value, this[key] )||(typeof this[key] == 'undefined'))?'':key; };
 
-	type: function(type){
-		if( typeof type != 'undefined' ) this.set({type:_.clone(type)});
-		return this.get('type');
-	}
 
-});
+	return Backbone.Model.extend({
+
+		defaults:{
+			type: 'Memento',
+			memento: ''
+		},
+
+		equal: function( memento ){
+			if( !( memento instanceof Backbone.actAs.Memento ) ) throw Error('Trying to compare non-Memento object.');
+			return _.isEqual( this.toJSON(), memento.toJSON() );
+		},
+
+		diffAdded: function(memento){
+			return diff( memento, this, diffNonExistMap );
+		},
+
+		diffChanged: function( memento ){ // No type comparison here!
+			return diff( memento, this, diffChangedMap );
+		},
+
+		diffDeleted: function(memento){
+			return diff( this, memento, diffNonExistMap );
+
+		},
+
+		diff: function( memento ){
+			return {
+				changed:	this.diffChanged(memento),
+				added:		this.diffAdded(memento),
+				deleted:	this.diffDeleted(memento)
+			};
+		},
+
+		memento: function(memento){
+			if( typeof memento != 'undefined' ) this.set({memento:_.clone(memento)});
+			return this.get('memento');
+		},
+
+		type: function(type){
+			if( typeof type != 'undefined' ) this.set({type:_.clone(type)});
+			return this.get('type');
+		}
+
+	});
+
+})();
 
 Backbone.actAs.MementoCollection = Backbone.Collection.extend({
 	model: Backbone.actAs.Memento
