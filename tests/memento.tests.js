@@ -9,7 +9,7 @@ test('Creation', 2, function(){
 test( 'Setters with _.clone', 5, function(){
 	var memento = new Backbone.actAs.Memento(),
 		type	= 'hello world',
-		mem		= {one: 'one', two:2};
+		mem		= {one: 'one', two:2, three: new Date('2011')};
 
 	same( memento.type(type), type, 'type() setter returns new value' );
 	same( memento.type(), type, 'type() getter' );
@@ -48,8 +48,8 @@ test( 'Equality', 5, function(){
 test( 'DiffChanged', function(){
 	var memento1 = new Backbone.actAs.Memento(),
 		memento2 = new Backbone.actAs.Memento(),
-		mem1	 = {one: 'one', two:2},
-		mem2	 = {one: 'one', two:2, three: 'ololo'},
+		mem1	 = {one: 'one', two:2, date: (new Date(2012))},
+		mem2	 = {one: 'one', two:2, three: 'ololo', date: (new Date(2011))},
 		mem3	 = {one: 'one', two:3};
 
 	memento1.memento( mem1 );
@@ -62,8 +62,8 @@ test( 'DiffChanged', function(){
 	same( memento2.diffChanged(memento1), {two:2}, 'ByValue difference other side' );
 
 	memento2.memento(mem2);
-	same( memento1.diffChanged(memento2), {}, 'No additional option in first memento' );
-	same( memento2.diffChanged(memento1), {}, 'Additional option in second memento is not treated as changed, but as deleted' );
+	same( memento1.diffChanged(memento2), { date:mem2.date }, 'No additional option in first memento' );
+	same( memento2.diffChanged(memento1), { date:mem1.date }, 'Additional option in second memento is not treated as changed, but as deleted' );
 
 } );
 

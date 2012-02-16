@@ -195,6 +195,9 @@ For API - see source in src/ folder in this repository. I want to believe code i
 
 # ChangeLog
 
+## v0.2.1
+* deepClone for Backbone.Model.attributes implementation. Fixes _.clone Date bug. (issue #2)
+
 ## v0.2
 * diff() method changed. Now it just collaborate the results of diffChanged, diffAdded, diffDeleted methods (issue #1)
 * diffChanged() method added. (issue #1)

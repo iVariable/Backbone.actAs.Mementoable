@@ -15,14 +15,13 @@ Backbone.actAs.Memento = (function(){
 		if( _keys.size().value() > 0 ){
 			_keys.each(function(key){
 				result[key] = this[key];
-
 			}, originalMemento.memento());
 		}
 		return result;
 	};
 
-	var diffNonExistMap = function(value, key){ return ( typeof this[key] == 'undefined' )?key:''; },
-		diffChangedMap = function(value, key){ return (_.isEqual( value, this[key] )||(typeof this[key] == 'undefined'))?'':key; };
+	var diffNonExistMap = function(value, key){return ( typeof this[key] == 'undefined' )?key:'';},
+		diffChangedMap = function(value, key){return (_.isEqual( value, this[key] )||(typeof this[key] == 'undefined'))?'':key;};
 
 
 	return Backbone.Model.extend({
@@ -77,6 +76,29 @@ Backbone.actAs.MementoCollection = Backbone.Collection.extend({
 });
 
 Backbone.actAs.Mementoable = (function(){
+
+	var deepClone = function(obj, depth) { // thanks to https://github.com/kmalakoff for this codeю
+
+		if (!obj || (typeof obj !== 'object')) return obj; // by value
+		else if (_.isString(obj)) return String.prototype.slice.call(obj);
+		else if (_.isDate(obj)) return new Date(obj.valueOf());
+		else if (_.isFunction(obj.clone)) return obj.clone();
+
+		var clone;
+
+		if (_.isArray(obj)) clone = Array.prototype.slice.call(obj);
+		else if (obj.constructor!=={}.constructor) return obj; // by reference
+		else clone = _.extend({}, obj);
+
+		if (!_.isUndefined(depth) && (depth > 0)) {
+			for (var key in clone) {
+				clone[key] = deepClone(clone[key], depth-1);
+			}
+		}
+
+		return clone;
+	};
+
 	return {
 
 		lastMemento: false,
@@ -102,11 +124,7 @@ Backbone.actAs.Mementoable = (function(){
 		},
 
 		saveMemento: function(){
-			var mem = {};
-			_(this.toJSON()).each(function(value, key){ //simple two-level clone. deepClone must be here!
-				mem[key] = _.clone(value);
-			});
-			var memento = new Backbone.actAs.Memento({memento: mem});
+			var memento = new Backbone.actAs.Memento({memento: deepClone(this.toJSON(), 100) });
 			this.trigger('memento:save', memento);
 			return memento;
 		},
