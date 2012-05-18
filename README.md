@@ -193,6 +193,10 @@ As you can see, code is much more neat than before.
 
 For API - see source in src/ folder in this repository. I want to believe code is self-explanatory. :)
 
+# License
+
+Backbone.actAs.Mementoable is available for use under the MIT software license.
+
 # ChangeLog
 
 ## v0.2.1
