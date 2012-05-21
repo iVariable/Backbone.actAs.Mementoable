@@ -105,13 +105,13 @@ Backbone.actAs.Mementoable = (function(){
 
 		initMementoable: function(){
 			if( typeof this._saveMemento == 'function' ){
-				this.bind( 'memento:save', _.bind( this._saveMemento, this ) );
+				this.on('memento:save', this._saveMemento, this);
 			}
 			if( typeof this._beforeRestoreMemento == 'function' ){
-				this.bind( 'memento:before-restore', _.bind( this._beforeRestoreMemento, this ) );
+				this.on('memento:before-restore', this._beforeRestoreMemento, this);
 			}
 			if( typeof this._afterRestoreMemento == 'function' ){
-				this.bind( 'memento:after-restore', _.bind( this._afterRestoreMemento, this ) );
+				this.on('memento:after-restore', this._afterRestoreMemento, this);
 			}
 		},
 
