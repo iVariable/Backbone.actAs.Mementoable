@@ -113,6 +113,7 @@ Backbone.actAs.Mementoable = (function(){
 			if( typeof this._afterRestoreMemento == 'function' ){
 				this.on('memento:after-restore', this._afterRestoreMemento, this);
 			}
+			return this;
 		},
 
 		getStoredMemento: function(){
@@ -121,6 +122,7 @@ Backbone.actAs.Mementoable = (function(){
 
 		storeMemento: function( memento ){
 			this.lastMemento = memento || this.saveMemento();
+			return this;
 		},
 
 		saveMemento: function(){
@@ -131,7 +133,7 @@ Backbone.actAs.Mementoable = (function(){
 
 		restoreMemento: function( memento ){
 			var memento = memento || this.lastMemento;
-			if(!memento) return; //?
+			if(!memento) return this; //?
 			this.trigger('memento:before-restore', memento);
 			if( this instanceof Backbone.Model ) {
 				this.set(memento.get('memento'));
@@ -139,6 +141,7 @@ Backbone.actAs.Mementoable = (function(){
 				this.reset(memento.get('memento'));
 			};
 			this.trigger('memento:after-restore', memento);
+			return this;
 		}
 
 	};
