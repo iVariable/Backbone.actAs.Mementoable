@@ -57,6 +57,14 @@ Backbone.actAs.Memento = (function(){
 			};
 		},
 
+		diffKeys: function( memento ){
+			return _.flatten([
+				_.keys( this.diffChanged(memento) ),
+				_.keys( this.diffAdded(memento)   ),
+				_.keys( this.diffDeleted(memento) )
+			]);
+    },
+
 		memento: function(memento){
 			if( typeof memento != 'undefined' ) this.set({memento:_.clone(memento)});
 			return this.get('memento');
