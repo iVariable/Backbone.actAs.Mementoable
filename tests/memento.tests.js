@@ -128,6 +128,35 @@ test( 'Diff', function(){
 
 } );
 
+test( 'DiffFields', function(){
+	var memento1 = new Backbone.actAs.Memento(),
+		memento2 = new Backbone.actAs.Memento(),
+		memento3 = new Backbone.actAs.Memento(),
+		memento4 = new Backbone.actAs.Memento(),
+		memento5 = new Backbone.actAs.Memento();
+
+	memento1.memento( {one: 'one', two:2});
+	memento2.memento( {one: 'one', two:2, three: 'ololo'} );
+	memento3.memento( {one: 'one', two: 3} );
+	memento4.memento( {one: 'one', two:5, three: 'ololo'} );
+	memento5.memento( {one: 'one', three: 'three', four: 'four'} );
+
+	same( memento1.diffKeys(memento1), [], 'Same mementos = no diff' );
+
+	same( memento2.diffKeys(memento1), ["three"], 'Deleted attribute' );
+	same( memento1.diffKeys(memento2), ["three"], 'Added attribute' );
+
+	same( memento1.diffKeys(memento3), ["two"], 'changed value' );
+	same( memento3.diffKeys(memento1), ["two"], 'changed value other side' );
+
+	same( memento1.diffKeys(memento4), ["two", "three"], 'changed value and added attribute' );
+	same( memento4.diffKeys(memento1), ["two", "three"], 'the other way around' );
+
+	same( memento2.diffKeys(memento5), ["three", "four", "two"], 'changed value, added and deleted attributes' );
+	same( memento5.diffKeys(memento2), ["three", "two", "four"], 'the other way around' );
+
+} );
+
 test('Non-memento operations', 5, function(){
 
 	var memento = new Backbone.actAs.Memento();
