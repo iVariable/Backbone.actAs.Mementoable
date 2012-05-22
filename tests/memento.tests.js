@@ -126,6 +126,65 @@ test( 'Diff', function(){
 	same( memento2.diff(memento5), {changed: {three:"three"}, added: {four:"four"}, deleted: {two: 2}}, 'changed value, added and deleted attributes' );
 	same( memento5.diff(memento2), {changed: {three:"ololo"}, added: {two:2}, deleted: {four:"four"}}, 'the other way around' );
 
+
+	// flattened diffs
+	same( memento1.diff(memento1, true), {}, 'Same mementos = no diff, flattened' );
+
+	same( memento2.diff(memento1, true), {three:"ololo"}, 'Deleted attribute, flattened' );
+	same( memento1.diff(memento2, true), {three:"ololo"}, 'Added attribute, flattened' );
+
+	same( memento1.diff(memento3, true), {two:3}, 'changed value, flattened' );
+	same( memento3.diff(memento1, true), {two:2}, 'changed value other side, flattened' );
+
+	same( memento1.diff(memento4, true), {two:5, three:"ololo"}, 'changed value and added attribute, flattened' );
+	same( memento4.diff(memento1, true), {two:2, three:"ololo"}, 'the other way around, flattened' );
+
+	same( memento2.diff(memento5, true), {three:"three", four:"four", two: 2}, 'changed value, added and deleted attributes, flattened' );
+	same( memento5.diff(memento2, true), {three:"ololo", two:2, four:"four"}, 'the other way around, flattened' );
+} );
+
+test( 'DiffFields', function(){
+	var memento1 = new Backbone.actAs.Memento(),
+		memento2 = new Backbone.actAs.Memento(),
+		memento3 = new Backbone.actAs.Memento(),
+		memento4 = new Backbone.actAs.Memento(),
+		memento5 = new Backbone.actAs.Memento();
+
+	memento1.memento( {one: 'one', two:2});
+	memento2.memento( {one: 'one', two:2, three: 'ololo'} );
+	memento3.memento( {one: 'one', two: 3} );
+	memento4.memento( {one: 'one', two:5, three: 'ololo'} );
+	memento5.memento( {one: 'one', three: 'three', four: 'four'} );
+
+	same( memento1.diffKeys(memento1), {changed: [], added: [], deleted: []}, 'Same mementos = no diff' );
+
+	same( memento2.diffKeys(memento1), {changed: [], added: [], deleted: ["three"]}, 'Deleted attribute' );
+	same( memento1.diffKeys(memento2), {changed: [], added: ["three"], deleted: []}, 'Added attribute' );
+
+	same( memento1.diffKeys(memento3), {changed: ["two"], added: [], deleted: []}, 'changed value' );
+	same( memento3.diffKeys(memento1), {changed: ["two"], added: [], deleted: []}, 'changed value other side' );
+
+	same( memento1.diffKeys(memento4), {changed: ["two"], added: ["three"], deleted: []}, 'changed value and added attribute' );
+	same( memento4.diffKeys(memento1), {changed: ["two"], added: [], deleted: ["three"]}, 'the other way around' );
+
+	same( memento2.diffKeys(memento5), {changed: ["three"], added: ["four"], deleted: ["two"]}, 'changed value, added and deleted attributes' );
+	same( memento5.diffKeys(memento2), {changed: ["three"], added: ["two"], deleted: ["four"]}, 'the other way around' );
+
+	// flattened keys
+	same( memento1.diffKeys(memento1, true), [], 'Same mementos = no diff, flattened' );
+
+	same( memento2.diffKeys(memento1, true), ["three"], 'Deleted attribute, flattened' );
+	same( memento1.diffKeys(memento2, true), ["three"], 'Added attribute, flattened' );
+
+	same( memento1.diffKeys(memento3, true), ["two"], 'changed value, flattened' );
+	same( memento3.diffKeys(memento1, true), ["two"], 'changed value other side, flattened' );
+
+	same( memento1.diffKeys(memento4, true), ["two", "three"], 'changed value and added attribute, flattened' );
+	same( memento4.diffKeys(memento1, true), ["two", "three"], 'the other way around, flattened' );
+
+	same( memento2.diffKeys(memento5, true), ["three", "four", "two"], 'changed value, added and deleted attributes, flattened' );
+	same( memento5.diffKeys(memento2, true), ["three", "two", "four"], 'the other way around, flattened' );
+
 } );
 
 test('Non-memento operations', 5, function(){
