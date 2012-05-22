@@ -18,6 +18,16 @@ Backbone.actAs.Memento = (function(){
 			}, originalMemento.memento());
 		}
 		return result;
+	},
+
+	flattenArrays = function( diff ){
+		return _.flatten(_.values(diff));
+	},
+
+	flattenObjects = function( diff ){
+		var values = _.values(diff);
+		values.unshift({});
+		return _.extend.apply(_, values);
 	};
 
 	var diffNonExistMap = function(value, key){return ( typeof this[key] == 'undefined' )?key:'';},
@@ -49,21 +59,23 @@ Backbone.actAs.Memento = (function(){
 
 		},
 
-		diff: function( memento ){
-			return {
+		diff: function( memento, flatten ){
+			var diff = {
 				changed:	this.diffChanged(memento),
 				added:		this.diffAdded(memento),
 				deleted:	this.diffDeleted(memento)
 			};
+			return flatten ? flattenObjects( diff ) : diff;
 		},
 
-		diffKeys: function( memento ){
-			return _.flatten([
-				_.keys( this.diffChanged(memento) ),
-				_.keys( this.diffAdded(memento)   ),
-				_.keys( this.diffDeleted(memento) )
-			]);
-    },
+		diffKeys: function( memento, flatten ){
+			var diff = {
+				changed:	_.keys( this.diffChanged(memento) ),
+				added:		_.keys( this.diffAdded(memento) ),
+				deleted:	_.keys( this.diffDeleted(memento) )
+			};
+			return flatten ? flattenArrays( diff ) : diff;
+		},
 
 		memento: function(memento){
 			if( typeof memento != 'undefined' ) this.set({memento:_.clone(memento)});
