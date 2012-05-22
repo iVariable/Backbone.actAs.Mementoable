@@ -25,6 +25,8 @@ but i need more flexibility so i've written my own implementation.
 
 You only need to have Backbone (including underscore.js - a requirement for Backbone) in your page before including the Backbone.ActAs.Mementoable plugin.
 
+Backbone >= 0.9.0 (for earlyer versions of Backbone use tag v0.2.1)
+
 ## Setup a model
 
 There are two ways of using this actAs-plugin:
@@ -73,7 +75,11 @@ console.log( TestObject.get('name') ); //'Ooops'
 
 if( !Memento0.equal( TestObject.saveMemento() ) ){
 	console.log('Now mementos aren\'t equal');
+
 	console.dir( Memento0.diff( TestObject.saveMemento() ) ); // Let's see what is different form our saved state
+	console.dir( Memento0.diff( TestObject.saveMemento(), 'flatten' ) ); // Flattened diff
+
+	console.dir( Memento0.diffKeys( TestObject.saveMemento(), 'flatten' ) ); // Getting changed keys
 }
 
 TestObject.restoreMemento( Memento0 ); // Restoring our memento
@@ -199,7 +205,13 @@ Backbone.actAs.Mementoable is available for use under the MIT software license.
 
 # ChangeLog
 
+## v0.2.2
+* now u need Backbone >= 0.9.0
+* diffKeys() method and flatten parameter for diff() method (issue)
+* few minor changes (bind() replaced with on(), returning this from some of Memento methods)
+
 ## v0.2.1
+* compatible with Backbone v0.5.3
 * deepClone for Backbone.Model.attributes implementation. Fixes _.clone Date bug. (issue #2)
 
 ## v0.2
