@@ -207,7 +207,7 @@ Backbone.actAs.Mementoable is available for use under the MIT software license.
 
 ## v0.2.2
 * now u need Backbone >= 0.9.0
-* diffKeys() method and flatten parameter for diff() method (issue)
+* diffKeys() method and flatten parameter for diff() method (issue #5)
 * few minor changes (bind() replaced with on(), returning this from some of Memento methods)
 
 ## v0.2.1
