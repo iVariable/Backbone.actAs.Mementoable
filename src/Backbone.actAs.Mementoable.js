@@ -20,6 +20,28 @@ Backbone.actAs.Memento = (function(){
 		return result;
 	},
 
+	deepClone = function(obj, depth) { // thanks to https://github.com/kmalakoff for this codeю
+
+		if (!obj || (typeof obj !== 'object')) return obj; // by value
+		else if (_.isString(obj)) return String.prototype.slice.call(obj);
+		else if (_.isDate(obj)) return new Date(obj.valueOf());
+		else if (_.isFunction(obj.clone)) return obj.clone();
+
+		var clone;
+
+		if (_.isArray(obj)) clone = Array.prototype.slice.call(obj);
+		else if (obj.constructor!=={}.constructor) return obj; // by reference
+		else clone = _.extend({}, obj);
+
+		if (!_.isUndefined(depth) && (depth > 0)) {
+			for (var key in clone) {
+				clone[key] = deepClone(clone[key], depth-1);
+			}
+		}
+
+		return clone;
+	},
+
 	flattenArrays = function( diff ){
 		return _.flatten(_.values(diff));
 	},
@@ -39,6 +61,13 @@ Backbone.actAs.Memento = (function(){
 		defaults:{
 			type: 'Memento',
 			memento: ''
+		},
+
+		initialize: function(){
+			this.set({
+				type: deepClone( this.type(),100 ),
+				memento: deepClone( this.memento(),100 )
+			},{silent: true});
 		},
 
 		equal: function( memento ){
@@ -78,12 +107,12 @@ Backbone.actAs.Memento = (function(){
 		},
 
 		memento: function(memento){
-			if( typeof memento != 'undefined' ) this.set({memento:_.clone(memento)});
+			if( typeof memento != 'undefined' ) this.set({memento:deepClone(memento,100)});
 			return this.get('memento');
 		},
 
 		type: function(type){
-			if( typeof type != 'undefined' ) this.set({type:_.clone(type)});
+			if( typeof type != 'undefined' ) this.set({type:deepClone(type,100)});
 			return this.get('type');
 		}
 
@@ -96,28 +125,6 @@ Backbone.actAs.MementoCollection = Backbone.Collection.extend({
 });
 
 Backbone.actAs.Mementoable = (function(){
-
-	var deepClone = function(obj, depth) { // thanks to https://github.com/kmalakoff for this codeю
-
-		if (!obj || (typeof obj !== 'object')) return obj; // by value
-		else if (_.isString(obj)) return String.prototype.slice.call(obj);
-		else if (_.isDate(obj)) return new Date(obj.valueOf());
-		else if (_.isFunction(obj.clone)) return obj.clone();
-
-		var clone;
-
-		if (_.isArray(obj)) clone = Array.prototype.slice.call(obj);
-		else if (obj.constructor!=={}.constructor) return obj; // by reference
-		else clone = _.extend({}, obj);
-
-		if (!_.isUndefined(depth) && (depth > 0)) {
-			for (var key in clone) {
-				clone[key] = deepClone(clone[key], depth-1);
-			}
-		}
-
-		return clone;
-	};
 
 	return {
 
@@ -146,7 +153,7 @@ Backbone.actAs.Mementoable = (function(){
 		},
 
 		saveMemento: function(){
-			var memento = new Backbone.actAs.Memento({memento: deepClone(this.toJSON(), 100) });
+			var memento = new Backbone.actAs.Memento({memento: this.toJSON()});
 			this.trigger('memento:save', memento);
 			return memento;
 		},
@@ -156,9 +163,9 @@ Backbone.actAs.Mementoable = (function(){
 			if(!memento) return this; //?
 			this.trigger('memento:before-restore', memento);
 			if( this instanceof Backbone.Model ) {
-				this.set(memento.get('memento'));
+				this.set(memento.memento());
 			}else{
-				this.reset(memento.get('memento'));
+				this.reset(memento.memento());
 			};
 			this.trigger('memento:after-restore', memento);
 			return this;

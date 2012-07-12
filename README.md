@@ -131,9 +131,7 @@ TestObject.bind( 'memento:save', function(memento){
 	var newMemento = memento.memento();
 	delete newMemento.uselessCounter;							// removing useless param...
 	newMemento.additionalParam = _.clone(this.additionalParam);	// ... and adding useful :)
-	memento.set({
-		memento:newMemento
-	});
+	memento.memento(newMemento);
 }, TestObject );
 
 
@@ -144,9 +142,7 @@ TestObject.bind( 'memento:before-restore', function(memento){
 	var newMemento = memento.memento();
 	this.additionalParam = newMemento.additionalParam;	// restoring our special param...
 	delete newMemento.additionalParam;					// ... and removing it, to prevent attributes garbaging
-	memento.set({
-		memento:newMemento
-	});
+	memento.memento(newMemento);
 }, TestObject );
 
 ```
@@ -178,18 +174,14 @@ var MyCoolModel = Backbone.Model.extend({
 		var newMemento = memento.memento();
 		delete newMemento.uselessCounter;							// removing useless param...
 		newMemento.additionalParam = _.clone(this.additionalParam);	// ... and adding useful :)
-		memento.set({
-			memento:newMemento
-		});
+		memento.memento(newMemento);
 	},
 
 	_beforeRestoreMemento: function(memento){
 		var newMemento = memento.memento();
 		this.additionalParam = newMemento.additionalParam;	// restoring our special param...
 		delete newMemento.additionalParam;					// ... and removing it, to prevent attributes garbaging
-		memento.set({
-			memento:newMemento
-		});
+		memento.memento(newMemento);
 	}
 });
 ```
@@ -204,6 +196,9 @@ For API - see source in src/ folder in this repository. I want to believe code i
 Backbone.actAs.Mementoable is available for use under the MIT software license.
 
 # ChangeLog
+
+## v0.2.3
+* deepClone helper moved from Mementoable to Memento to simplify standalone usage of Memento. No BC breaks.
 
 ## v0.2.2
 * now u need Backbone >= 0.9.0
