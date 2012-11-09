@@ -1,0 +1,44 @@
+{
+    "name": "backbone.actas.mementoable",
+    "version": "0.2.4",
+    "description": "Memento pattern realization for Backbone.js models",
+    "homepage": "https://github.com/iVariable/Backbone.actAs.Mementoable",
+    "keywords": [
+        "memento",
+        "backbone",
+        "backbone.actas"
+    ],
+    "jam": {
+        "dependencies": {
+            "backbone": ">=0.9.2"
+        },
+        "main": "src/Backbone.actAs.Mementoable.js",
+        "include": [
+            "src/Backbone.actAs.Mementoable.js"
+        ],
+        "shim": {
+            "deps": ["backbone"],
+            "exports": "Backbone.actAs.Mementoable"
+        }
+    },
+    "maintainers": [
+        {
+            "name": "Vladimir Savenkov",
+            "email": "ivariable@gmail.com",
+            "web": "http://ivariable.ru"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/mit-license.php",
+        }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/iVariable/Backbone.actAs.Mementoable"
+        }
+    ],
+    "github": "https://github.com/iVariable/Backbone.actAs.Mementoable"
+}

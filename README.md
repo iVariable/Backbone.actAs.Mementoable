@@ -27,6 +27,13 @@ You only need to have Backbone (including underscore.js - a requirement for Back
 
 Backbone >= 0.9.0 (for earlyer versions of Backbone use tag v0.2.1)
 
+## Installation
+
+You can include this plugin directly into your project, or through Jam
+```
+jam install backbone.actas.mementoable
+```
+
 ## Setup a model
 
 There are two ways of using this actAs-plugin:
@@ -196,6 +203,10 @@ For API - see source in src/ folder in this repository. I want to believe code i
 Backbone.actAs.Mementoable is available for use under the MIT software license.
 
 # ChangeLog
+
+## v0.2.4
+* Plugin wrapped into unversal module loader.
+* Added package.json for npm and jam.
 
 ## v0.2.3
 * deepClone helper moved from Mementoable to Memento to simplify standalone usage of Memento. No BC breaks.
